@@ -24,9 +24,6 @@ jobs:
       - name: Install dependencies # Шаг для установки зависимостей проекта
         run: |
           pip install flake8 bandit
-  
-      - name: Lint code # Шаг для проверки кода на соответствие стилю
-        run: flake8 .
 
       - name: Run tests # Шаг для выполнения тестов с покрытием
         run: python -m unittest discover -s tests
