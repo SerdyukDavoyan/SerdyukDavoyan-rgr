@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+       body {
+            font-family: Arial;
+            background-color: #85e4ed;
+            padding: 20px;
+        }
+        form {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 300px;
+            margin: auto;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        button {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #0d3b5a;
+        }
+        h1 {
+                text-align: center;
+         }
+    </style>
+</head>
+<body>
+    <h1>Редактировать подписку: {{ subscriptions.name }}</h1>
+    <form action="{{ url_for('rgr.update_subscriptions', id=subscriptions.id) }}" method="POST">
+        <label for="amount">Сумма:</label>
+        <input type="text" name="amount" value="{{ subscriptions.amount }}" required>
+
+        <label for="periodicity">Периодичность:</label>
+        <input type="text" name="periodicity" value="{{ subscriptions.periodicity }}" required>
+
+        <label for="start_date">Дата начала:</label>
+        <input type="date" name="start_date" value="{{ subscriptions.start_date }}" required>
+
+        <button type="submit">Сохранить</button>
+    </form>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/get_subscriptions">Назад в подписки</a>
+        <span style="margin: 0 10px;"></span>
+        <a href="/index">Назад в меню</a>
+    </div>
+</body>
+</html>

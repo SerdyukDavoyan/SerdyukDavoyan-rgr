@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Проверка кода из репозитория
+        uses: actions/checkout@v2
+
+      - name: Set up Python # Шаг для настройки Python окружения
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies # Шаг для установки зависимостей проекта
+        run: |
+          pip install flake8 pytest pytest-cov bandit
+  
+      - name: Lint code # Шаг для проверки кода на соответствие стилю
+        run: flake8 .
+
+      - name: Run tests # Шаг для выполнения тестов с покрытием
+        run: pytest tests/ 
+
+      - name: Check security # Шаг для проверки безопасности кода
+        run: bandit -r .
