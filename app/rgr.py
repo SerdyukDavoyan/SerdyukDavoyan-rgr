@@ -5,6 +5,7 @@ from DB.models import Subscriptions  # Убедитесь, что импорти
 # Создаем экземпляр класса Blueprint
 rgr = Blueprint("rgr", __name__)
 
+
 @rgr.route('/')
 @rgr.route('/index')
 def index():
@@ -25,7 +26,6 @@ def create_subscriptions():
         periodicity = request.form.get('periodicity')
         start_date = request.form.get('start_date')
 
-        # Создание новой подписки
         subscriptions = Subscriptions(name=name, amount=amount, periodicity=periodicity, start_date=start_date)
         db.session.add(subscriptions)
         db.session.commit()
@@ -45,7 +45,7 @@ def update_subscriptions(id):
         subscriptions.start_date = request.form.get('start_date', subscriptions.start_date)
         
         db.session.commit()
-        return redirect(url_for('rgr.get_subscriptions'))  # Перенаправим на страницу со всеми подписками
+        return redirect(url_for('rgr.get_subscriptions')) 
 
     return render_template("update_subscriptions.html", subscriptions=subscriptions)
 
@@ -55,4 +55,4 @@ def delete_subscriptions(id):
     subscription = Subscriptions.query.get(id)
     db.session.delete(subscription)
     db.session.commit()
-    return redirect(url_for('rgr.get_subscriptions'))  # Перенаправим на страницу со всеми подписками
+    return redirect(url_for('rgr.get_subscriptions')) 
