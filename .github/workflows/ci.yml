@@ -3,10 +3,11 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - main # Запуск при пуше в ветку main
   pull_request:
     branches:
-      - main
+      - main # Запуск при создании PR в ветку main
+  workflow_dispatch: # Позволяет запускать вручную
 
 jobs:
   test:
