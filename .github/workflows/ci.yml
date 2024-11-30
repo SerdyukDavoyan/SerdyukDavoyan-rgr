@@ -26,4 +26,4 @@ jobs:
           pip install bandit 
 
       - name: Check security # Шаг для проверки безопасности кода
-        run: bandit rgr.py .
+        run: bandit app/rgr.py .
