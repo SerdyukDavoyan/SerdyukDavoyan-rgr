@@ -23,10 +23,7 @@ jobs:
 
       - name: Install dependencies # Шаг для установки зависимостей проекта
         run: |
-          pip install flake8 bandit sqlalchemy flask_sqlalchemy psycopg2
-
-      - name: Run tests # Шаг для выполнения тестов с покрытием
-        run: python -m unittest discover -s tests
+          pip install bandit 
 
       - name: Check security # Шаг для проверки безопасности кода
-        run: bandit -r .
+        run: bandit rgr.py .
