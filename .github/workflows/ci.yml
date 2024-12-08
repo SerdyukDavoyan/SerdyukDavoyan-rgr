@@ -1,4 +1,4 @@
-name: CI
+name: CI # Название рабочего процесса CI
 
 on:
   push:
@@ -6,24 +6,25 @@ on:
       - main # Запуск при пуше в ветку main
   pull_request:
     branches:
-      - main # Запуск при создании PR в ветку main
+      - main # Запуск при создании pull request в ветку main
   workflow_dispatch: # Позволяет запускать вручную
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Проверка кода из репозитория
-        uses: actions/checkout@v2
+  test: # Определение задачи с именем "test"
+    runs-on: ubuntu-latest # Задача будет выполняться на последней версии Ubuntu
 
-      - name: Set up Python # Шаг для настройки Python окружения
-        uses: actions/setup-python@v2
+    steps: # Шаги, которые будут выполнены в рамках задачи
+      - name: Checkout code # Шаг для получения кода из репозитория
+        uses: actions/checkout@v2 # Использование действия для извлечения кода
+
+      - name: Set up Python # Шаг для настройки окружения Python
+        uses: actions/setup-python@v2 # Использование действия для установки Python
         with:
-          python-version: '3.x'
+          python-version: '3.x' # Указание версии Python
 
-      - name: Install dependencies # Шаг для установки зависимостей проекта
+      - name: Installing dependencies # Шаг для установки зависимостей проекта
         run: |
-          pip install bandit 
+          pip install bandit  
 
       - name: Check security # Шаг для проверки безопасности кода
-        run: bandit app/rgr.py app/migrator.py
+        run: bandit app/rgr.py app/migrator.py # Запуск Bandit для анализа указанных файлов на наличие уязвимостей
