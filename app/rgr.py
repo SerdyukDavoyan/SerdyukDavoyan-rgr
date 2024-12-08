@@ -1,58 +1,59 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, request, jsonify
 from DB import db
 from DB.models import Subscriptions  # Убедитесь, что импортируете модель Subscription
 
 # Создаем экземпляр класса Blueprint
 rgr = Blueprint("rgr", __name__)
 
-
-@rgr.route('/')
-@rgr.route('/index')
-def index():
-    return render_template('index.html')
-
-
-@rgr.route('/get_subscriptions', methods=['GET'])
+@rgr.route('/subscriptions', methods=['GET'])
 def get_subscriptions():
     subscriptions = Subscriptions.query.all()
-    return render_template("get_subscriptions.html", subscriptions=subscriptions)
+    return jsonify([{
+        'id': sub.id,
+        'name': sub.name,
+        'amount': sub.amount,
+        'periodicity': sub.periodicity,
+        'start_date': sub.start_date.strftime('%Y-%m-%d')  # Преобразуем дату в строку
+    } for sub in subscriptions]), 200
+
+@rgr.route('/subscriptions', methods=['POST'])
+def create_subscription():
+    data = request.get_json()
+    if not all(key in data for key in ('name', 'amount', 'periodicity', 'start_date')):
+        return jsonify({'error': 'Missing data'}), 400
+
+    subscription = Subscriptions(
+        name=data['name'],
+        amount=data['amount'],
+        periodicity=data['periodicity'],
+        start_date=data['start_date']  # Предполагается, что формат даты корректен
+    )
+    db.session.add(subscription)
+    db.session.commit()
+
+    return jsonify({'id': subscription.id}), 201
 
 
-@rgr.route('/create_subscriptions', methods=['GET', 'POST'])
-def create_subscriptions():
-    if request.method == 'POST':
-        name = request.form.get('name')
-        amount = request.form.get('amount')
-        periodicity = request.form.get('periodicity')
-        start_date = request.form.get('start_date')
+# Обновление существующей подписки
+@rgr.route('/subscriptions/<int:id>', methods=['PUT'])
+def update_subscription(id):
+    data = request.get_json()
+    subscription = Subscriptions.query.get_or_404(id)
 
-        subscriptions = Subscriptions(name=name, amount=amount, periodicity=periodicity, start_date=start_date)
-        db.session.add(subscriptions)
-        db.session.commit()
-        
-        return redirect(url_for('rgr.get_subscriptions'))
+    # Обновляем поля подписки
+    subscription.name = data['name']
+    subscription.amount = data['amount']
+    subscription.periodicity = data['periodicity']
+    subscription.start_date = data['start_date']
 
-    return render_template("create_subscriptions.html")
-
-
-@rgr.route('/subscriptions/<int:id>', methods=['GET', 'POST'])
-def update_subscriptions(id):
-    subscriptions = Subscriptions.query.get_or_404(id)
+    db.session.commit()
     
-    if request.method == 'POST':
-        subscriptions.amount = request.form.get('amount', subscriptions.amount)
-        subscriptions.periodicity = request.form.get('periodicity', subscriptions.periodicity)
-        subscriptions.start_date = request.form.get('start_date', subscriptions.start_date)
-        
-        db.session.commit()
-        return redirect(url_for('rgr.get_subscriptions')) 
+    return jsonify({'message': 'Subscription updated successfully'}), 200
 
-    return render_template("update_subscriptions.html", subscriptions=subscriptions)
 
-    
-@rgr.route('/subscriptions/<int:id>/delete', methods=['POST'])
-def delete_subscriptions(id):
-    subscription = Subscriptions.query.get(id)
+@rgr.route('/subscriptions/<int:id>', methods=['DELETE'])
+def delete_subscription(id):
+    subscription = Subscriptions.query.get_or_404(id)
     db.session.delete(subscription)
     db.session.commit()
-    return redirect(url_for('rgr.get_subscriptions')) 
+    return jsonify({'message': 'Subscription deleted successfully'}), 204

@@ -1,7 +1,7 @@
 from . import db
 
 class Subscriptions(db.Model):
-    __tablename__ = 'subscriptions'
+    __tablename__ = 'subscriptions'  
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -10,8 +10,7 @@ class Subscriptions(db.Model):
     start_date = db.Column(db.Date, nullable=False)
 
 class MigrationLog(db.Model):
-    __tablename__ = 'migration_log'
+    __tablename__ = 'migration_log' 
 
     id = db.Column(db.Integer, primary_key=True)
     migration_id = db.Column(db.Integer, nullable=False)
-    
