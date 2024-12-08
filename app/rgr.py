@@ -43,7 +43,7 @@ def create_subscription():
     db.session.commit()
 
     # Возвращаем ID созданной подписки с кодом статуса 201 (Created)
-    return jsonify({'id': subscription.id}), 201
+    return jsonify({'Subscription id ': subscription.id}), 201
 
 # Обновление существующей подписки по ID
 @rgr.route('/subscriptions/<int:id>', methods=['PUT'])
@@ -72,9 +72,7 @@ def delete_subscription(id):
     # Получаем подписку по ID, если не найдена — возвращаем ошибку 404 (Not Found)
     subscription = Subscriptions.query.get_or_404(id)
     
-    # Удаляем подписку из базы данных
     db.session.delete(subscription)
     db.session.commit()
     
-    # Возвращаем сообщение об успешном удалении с кодом статуса 204 (No Content)
-    return jsonify({'message': 'Subscription deleted successfully'}), 204
+    return '', 204  # Возвращаем статус 204 
