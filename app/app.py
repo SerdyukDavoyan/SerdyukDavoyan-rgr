@@ -11,10 +11,10 @@ app.register_blueprint(rgr)
 app.secret_key = "12345"
 
 # Настройки подключения к базе данных
-user_db = "PolinaZaikoRPP"  # Имя пользователя базы данных
+user_db = "RPP"  # Имя пользователя базы данных
 host_ip = "127.0.0.1"  # IP-адрес хоста базы данных 
 host_port = "5432"  # Порт, на котором работает база данных PostgreSQL
-database_name = "RPP_LAB_5"  # Имя базы данных
+database_name = "RPP_RGR"  # Имя базы данных
 password = "12345"  # Пароль пользователя базы данных
 
 # Конфигурация подключения к базе данных PostgreSQL с использованием SQLAlchemy
